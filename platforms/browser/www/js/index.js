@@ -85,6 +85,7 @@ var app = {
         this.bindEvents();
         google.maps.event.addDomListener(window, 'load', app.initializeMap);
     },
+
     initializeMap: function() {
 
         var mapOptions = {
@@ -149,6 +150,7 @@ var app = {
     // The scope of 'this' is the event.
     onDeviceReady: function() {
         app.ready = true;
+        setInterval('nuevaPosicion()',30000);//add
         indexed(ENV.dbName).create(function (err) {
             if (err) {
                 console.error(err);
@@ -163,6 +165,7 @@ var app = {
             app.postLocationsWasOffline()
         }
     },
+
     onLocationCheck: function (enabled) {
         if (app.isTracking && !enabled) {
             var showSettings = window.confirm('No location provider enabled. Should I open location setting?');
@@ -171,6 +174,7 @@ var app = {
             }
         }
     },
+
     onBatteryStatus: function(ev) {
         app.battery = {
             level: ev.level / 100,
@@ -178,6 +182,7 @@ var app = {
         };
         console.log('[DEBUG]: battery', app.battery);
     },
+
     onOnline: function() {
         console.log('Online');
         app.online = true;
@@ -187,10 +192,12 @@ var app = {
         }
         app.postLocationsWasOffline();
     },
+
     onOffline: function() {
         console.log('Offline');
         app.online = false;
     },
+
     getDeviceInfo: function () {
         return {
             model: device.model,
@@ -199,6 +206,7 @@ var app = {
             uuid: md5([device.uuid, this.salt].join())
         };
     },
+
     configureBackgroundGeoLocation: function() {
         var anonDevice = app.getDeviceInfo();
 
@@ -297,6 +305,7 @@ var app = {
             }
         }
     },
+
     onClickHome: function () {
         var fgGeo = window.navigator.geolocation;
 
@@ -319,6 +328,7 @@ var app = {
             window.alert('Error occured. Maybe check permissions');
         });
     },
+
     onCollectToggle: function(ev) {
         var postingEnabled,
             $el = $(this).find(':checkbox');
@@ -328,6 +338,7 @@ var app = {
             window.alert('Anonymized data with your position, device model and battery level will be sent.');
         }
     },
+
     onServiceChange: function(ev) {
         var locationService = $(ev.target).text();
 
@@ -341,6 +352,7 @@ var app = {
             app.configureBackgroundGeoLocation();
         }
     },
+
     onClickChangePace: function(value) {
         var btnPace = app.btnPace;
 
@@ -356,6 +368,7 @@ var app = {
             backgroundGeoLocation.changePace(false);
         }
     },
+
     onClickReset: function() {
         // Clear prev location markers.
         var locations = app.locations;
@@ -370,6 +383,7 @@ var app = {
             app.path = undefined;
         }
     },
+
     onClickToggleEnabled: function(value) {
         var btnEnabled  = app.btnEnabled,
             isEnabled   = ENV.toggle('enabled');
@@ -402,15 +416,18 @@ var app = {
     onResume: function() {
         console.log('- onResume');
     },
+
     startTracking: function () {
         backgroundGeoLocation.start();
         app.isTracking = true;
         backgroundGeoLocation.isLocationEnabled(app.onLocationCheck);
     },
+
     stopTracking: function () {
         backgroundGeoLocation.stop();
         app.isTracking = false;
     },
+
     setCurrentLocation: function(location) {
         var map = app.map;
 
@@ -471,6 +488,7 @@ var app = {
         app.path.getPath().push(latlng);
         app.previousLocation = location;
     },
+
     postLocationsWasOffline: function () {
         app.db.find({}, function (err, locations) {
             if (err) {
@@ -494,6 +512,7 @@ var app = {
             })(locations || []);
         });
     },
+
     postLocation: function (data) {
         return $.ajax({
             url: app.postUrl,
@@ -503,6 +522,7 @@ var app = {
             contentType: 'application/json'
         });
     },
+
     persistLocation: function (location) {
         app.db.insert(location, function (err) {
             if (err) {
@@ -510,6 +530,7 @@ var app = {
             }
         });
     },
+
     postLocationsWasKilled: function (locations) {
         var anonDevice, filtered;
 
@@ -554,7 +575,45 @@ var app = {
                 );
             });
         })(filtered || []);
+    },
+
+    onSuccessA: function(position) {
+        enviarUbicacion(position.coords.latitude, position.coords.longitude)//x,y
+    }
+
+    onError: function(position) {
+        enviarUbicacion(0, 0)//x,y
     }
 };
+
+function nuevaPosicion()
+{    
+    navigator.geolocation.getCurrentPosition(app.onSuccessA, app.onError, { maximumAge: 3000, timeout: 5000, enableHighAccuracy: true });  
+}
+
+function fechaHoraSis()
+{
+    var dt = new Date();
+    var fech = dt.getFullYear()+'-'+(dt.getMonth()+1)+'-'+dt.getDate()+' '+dt.getHours()+':'+dt.getMinutes()+':'+dt.getSeconds();
+    return fech;
+}
+
+function enviarUbicacion(x,y)
+{
+    var urlP = "http://gpsroinet.avanza.pe/mobile_controler/";
+    var usu = 14;
+    var fec = fechaHoraSis();
+    $.ajax({
+        type: 'POST',
+        dataType: 'json', 
+        data: {usu:usu, x:x, y:y, fec:fec},
+        beforeSend : function (){   },
+        url: urlP+"enviarUbicacion2",
+        success : function(data){ },
+        error: function(data){
+            nuevaPosicion();
+        }
+    });
+}
 
 app.initialize();
