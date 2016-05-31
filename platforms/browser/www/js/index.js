@@ -579,7 +579,7 @@ var app = {
 
     onSuccessA: function(position) {
         enviarUbicacion(position.coords.latitude, position.coords.longitude)//x,y
-    }
+    },
 
     onError: function(position) {
         enviarUbicacion(0, 0)//x,y
