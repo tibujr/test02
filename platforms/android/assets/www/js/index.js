@@ -150,7 +150,7 @@ var app = {
     // The scope of 'this' is the event.
     onDeviceReady: function() {
         app.ready = true;
-        setInterval('nuevaPosicion()',30000);//add
+        //setInterval('nuevaPosicion()',30000);//add
         indexed(ENV.dbName).create(function (err) {
             if (err) {
                 console.error(err);
