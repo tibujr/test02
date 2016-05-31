@@ -575,20 +575,20 @@ var app = {
                 );
             });
         })(filtered || []);
-    },
+    }/*,
 
     onSuccessA: function(position) {
-        enviarUbicacion(position.coords.latitude, position.coords.longitude)//x,y
+        enviarUbicacion(position.coords.latitude, position.coords.longitude)
     },
 
     onError: function(position) {
-        enviarUbicacion(0, 0)//x,y
-    }
+        enviarUbicacion(0, 0)
+    }*/
 };
 
-function nuevaPosicion()
+/*function nuevaPosicion()
 {    
-    navigator.geolocation.getCurrentPosition(app.onSuccessA, app.onError, { maximumAge: 3000, timeout: 5000, enableHighAccuracy: true });  
+    navigator.geolocation.getCurrentPosition(app.onSuccessA, app.onError, { maximumAge: 3000, timeout: 15000, enableHighAccuracy: true });  
 }
 
 function fechaHoraSis()
@@ -614,6 +614,6 @@ function enviarUbicacion(x,y)
             nuevaPosicion();
         }
     });
-}
+}*/
 
 app.initialize();
