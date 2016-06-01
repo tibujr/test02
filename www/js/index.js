@@ -361,8 +361,8 @@ var app = {
 
     startTracking: function () {
         backgroundGeoLocation.start();
-        app.isTracking = true;
-        backgroundGeoLocation.isLocationEnabled(app.onLocationCheck);
+        /*app.isTracking = true;
+        backgroundGeoLocation.isLocationEnabled(app.onLocationCheck);*/
     },
 
     stopTracking: function () {
