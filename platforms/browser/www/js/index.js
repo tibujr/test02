@@ -168,93 +168,97 @@ var app = {
     },
 
     configureBackgroundGeoLocation: function() {
-        var anonDevice = app.getDeviceInfo();
+        try{
+            var anonDevice = app.getDeviceInfo();
 
-        var yourAjaxCallback = function(response) {
-            backgroundGeoLocation.finish();
-        };
-
-        var callbackFn = function(location) {
-            var data = {
-                location: {
-                    uuid: new Date().getTime(),
-                    timestamp: location.time,
-                    battery: app.battery,
-                    coords: location,
-                    service_provider: ENV.settings.locationService
-                },
-                device: anonDevice
+            var yourAjaxCallback = function(response) {
+                backgroundGeoLocation.finish();
             };
-            console.log('[js] BackgroundGeoLocation callback:  ' + location.latitude + ',' + location.longitude);
-            $("#loc").append('<p> A)'+ location.latitude+','+location.longitude+'</p>')
-            /*try {
-                app.setCurrentLocation(location);
-            } catch (e) {
-                console.error('[ERROR]: setting location', e.message);
-            }
 
-            if (app.postingEnabled) {
-                app.postLocation(data)
-                .fail(function () {
-                    app.persistLocation(data);
-                })
-                .always(function () {
+            var callbackFn = function(location) {
+                var data = {
+                    location: {
+                        uuid: new Date().getTime(),
+                        timestamp: location.time,
+                        battery: app.battery,
+                        coords: location,
+                        service_provider: ENV.settings.locationService
+                    },
+                    device: anonDevice
+                };
+                console.log('[js] BackgroundGeoLocation callback:  ' + location.latitude + ',' + location.longitude);
+                $("#loc").append('<p> A)'+ location.latitude+','+location.longitude+'</p>')
+                /*try {
+                    app.setCurrentLocation(location);
+                } catch (e) {
+                    console.error('[ERROR]: setting location', e.message);
+                }
+
+                if (app.postingEnabled) {
+                    app.postLocation(data)
+                    .fail(function () {
+                        app.persistLocation(data);
+                    })
+                    .always(function () {
+                        yourAjaxCallback.call(this);
+                    });
+                } else {
                     yourAjaxCallback.call(this);
-                });
-            } else {
-                yourAjaxCallback.call(this);
+                }*/
+            };
+
+            var failureFn = function(err) {
+                //console.log('BackgroundGeoLocation err', err);
+                window.alert('BackgroundGeoLocation err: ' + JSON.stringify(err));
+                $("#loc").append('<p> E) 0,0 </p>')
+            };
+
+            backgroundGeoLocation.onStationary(function(location) {
+                /*if (!app.stationaryRadius) {
+                    app.stationaryRadius = new google.maps.Circle({
+                        fillColor: '#cc0000',
+                        fillOpacity: 0.4,
+                        strokeOpacity: 0,
+                        map: app.map
+                    });
+                }
+                var radius = (location.accuracy < location.radius) ? location.radius : location.accuracy;
+                var center = new google.maps.LatLng(location.latitude, location.longitude);
+                app.stationaryRadius.setRadius(radius);
+                app.stationaryRadius.setCenter(center);*/
+            });
+
+            backgroundGeoLocation.configure(callbackFn, failureFn, {
+                desiredAccuracy: 10,
+                stationaryRadius: 50,
+                distanceFilter: 50,
+                locationTimeout: 30,
+                notificationIcon: 'mappointer',
+                notificationIconColor: '#FEDD1E',
+                notificationTitle: 'Background tracking', // <-- android only, customize the title of the notification
+                notificationText: 'Hola que hace',//ENV.settings.locationService, // <-- android only, customize the text of the notification
+                activityType: 'AutomotiveNavigation',
+                debug: true, // <-- enable this hear sounds for background-geolocation life-cycle.
+                stopOnTerminate: false, // <-- enable this to clear background location settings when the app terminates
+                locationService: backgroundGeoLocation.service[ENV.settings.locationService],
+                fastestInterval: 5000,
+                activitiesInterval: 10000
+            });
+
+            /*var settings = ENV.settings;
+
+            if (settings.enabled == 'true') {
+                app.startTracking();
+
+                if (settings.aggressive == 'true') {
+                    backgroundGeoLocation.changePace(true);
+                }
             }*/
-        };
 
-        var failureFn = function(err) {
-            //console.log('BackgroundGeoLocation err', err);
-            window.alert('BackgroundGeoLocation err: ' + JSON.stringify(err));
-            $("#loc").append('<p> E) 0,0 </p>')
-        };
-
-        backgroundGeoLocation.onStationary(function(location) {
-            /*if (!app.stationaryRadius) {
-                app.stationaryRadius = new google.maps.Circle({
-                    fillColor: '#cc0000',
-                    fillOpacity: 0.4,
-                    strokeOpacity: 0,
-                    map: app.map
-                });
-            }
-            var radius = (location.accuracy < location.radius) ? location.radius : location.accuracy;
-            var center = new google.maps.LatLng(location.latitude, location.longitude);
-            app.stationaryRadius.setRadius(radius);
-            app.stationaryRadius.setCenter(center);*/
-        });
-
-        backgroundGeoLocation.configure(callbackFn, failureFn, {
-            desiredAccuracy: 10,
-            stationaryRadius: 50,
-            distanceFilter: 50,
-            locationTimeout: 30,
-            notificationIcon: 'mappointer',
-            notificationIconColor: '#FEDD1E',
-            notificationTitle: 'Background tracking', // <-- android only, customize the title of the notification
-            notificationText: 'Hola que hace',//ENV.settings.locationService, // <-- android only, customize the text of the notification
-            activityType: 'AutomotiveNavigation',
-            debug: true, // <-- enable this hear sounds for background-geolocation life-cycle.
-            stopOnTerminate: false, // <-- enable this to clear background location settings when the app terminates
-            locationService: backgroundGeoLocation.service[ENV.settings.locationService],
-            fastestInterval: 5000,
-            activitiesInterval: 10000
-        });
-
-        /*var settings = ENV.settings;
-
-        if (settings.enabled == 'true') {
             app.startTracking();
-
-            if (settings.aggressive == 'true') {
-                backgroundGeoLocation.changePace(true);
-            }
-        }*/
-
-        app.startTracking();
+        }catch(er){
+            $("#loc").append('<p>ERROR:'+er+'</p>')
+        }
     },
 
     /*onClickHome: function () {
