@@ -72,11 +72,11 @@ var app = {
     },*/
 
     bindEvents: function() {
-        document.addEventListener('deviceready', this.onDeviceReady, false);/*SI*/
-        document.addEventListener('pause', this.onPause, false);/*SI*/
-        document.addEventListener('resume', this.onResume, false);/*SI*/
-        document.addEventListener("offline", this.onOffline, false);/*SI*/
-        document.addEventListener("online", this.onOnline, false);/*SI*/
+        document.addEventListener('deviceready', this.onDeviceReady, false);
+        document.addEventListener('pause', this.onPause, false);
+        document.addEventListener('resume', this.onResume, false);
+        document.addEventListener("offline", this.onOffline, false);
+        document.addEventListener("online", this.onOnline, false);
 
         /*this.btnHome    = $('#btn-home');
         this.btnReset   = $('#btn-reset');
@@ -357,8 +357,13 @@ var app = {
 
     onPause: function() {
         console.log('- onPause');
+        navigator.geolocation.watchPosition(app.enviarUbicacion, app.onError, { maximumAge: 3000, timeout: 5000, enableHighAccuracy: true } );
         // app.stopPositionWatch();
     },
+
+    onError: function(){
+
+    }
 
     onResume: function() {
         console.log('- onResume');
