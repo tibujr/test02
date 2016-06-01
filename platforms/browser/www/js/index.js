@@ -169,15 +169,12 @@ var app = {
 
     configureBackgroundGeoLocation: function() {
         var anonDevice = app.getDeviceInfo();
-        var cont = 0;
 
         var yourAjaxCallback = function(response) {
             backgroundGeoLocation.finish();
         };
 
         var callbackFn = function(location) {
-            cont++;
-
             var data = {
                 location: {
                     uuid: new Date().getTime(),
@@ -189,7 +186,7 @@ var app = {
                 device: anonDevice
             };
             //console.log('[js] BackgroundGeoLocation callback:  ' + location.latitude + ',' + location.longitude);
-            $("#loc").append('<p> A-'+cont+') '+ location.latitude+','+location.longitude+' - '+location.time+'</p>')
+            $("#loc").append('<p> A) '+ location.latitude+','+location.longitude+' - '+location.time+'</p>')
             /*try {
                 app.setCurrentLocation(location);
             } catch (e) {
@@ -215,11 +212,8 @@ var app = {
             $("#loc").append('<p> 0,0 </p>')
         };
 
-        var con = 0;
-
         backgroundGeoLocation.onStationary(function(location) {
-            con++;
-            $("#loc").append('<p> B-'+con+') '+ location.latitude+','+location.longitude+' - '+location.accuracy+';'+location.radius+'</p>')
+            $("#loc").append('<p> B) '+ location.latitude+','+location.longitude+' - '+location.accuracy+';'+location.radius+'</p>')
             /*if (!app.stationaryRadius) {
                 app.stationaryRadius = new google.maps.Circle({
                     fillColor: '#cc0000',
@@ -247,7 +241,7 @@ var app = {
             debug: true, // <-- enable this hear sounds for background-geolocation life-cycle.
             stopOnTerminate: false, // <-- enable this to clear background location settings when the app terminates
             locationService: backgroundGeoLocation.service[ENV.settings.locationService],
-            fastestInterval: 20000,
+            fastestInterval: 5000,
             activitiesInterval: 10000
         });
 
