@@ -110,7 +110,7 @@ var app = {
 
     onDeviceReady: function() {
         //app.ready = true;
-        setInterval('app.nuevaPosicion()',30000);//add
+        //setInterval('app.nuevaPosicion()',30000);//add
         /*indexed(ENV.dbName).create(function (err) {
             if (err) {
                 console.error(err);
@@ -169,12 +169,15 @@ var app = {
 
     configureBackgroundGeoLocation: function() {
         var anonDevice = app.getDeviceInfo();
+        var cont = 0;
 
         var yourAjaxCallback = function(response) {
             backgroundGeoLocation.finish();
         };
 
         var callbackFn = function(location) {
+            cont++;
+
             var data = {
                 location: {
                     uuid: new Date().getTime(),
@@ -185,8 +188,8 @@ var app = {
                 },
                 device: anonDevice
             };
-            console.log('[js] BackgroundGeoLocation callback:  ' + location.latitude + ',' + location.longitude);
-
+            //console.log('[js] BackgroundGeoLocation callback:  ' + location.latitude + ',' + location.longitude);
+            $("#loc").append('<p> A-'+cont+') '+ location.latitude+','+location.longitude+' - '+location.time+'</p>')
             /*try {
                 app.setCurrentLocation(location);
             } catch (e) {
@@ -209,9 +212,14 @@ var app = {
         var failureFn = function(err) {
             //console.log('BackgroundGeoLocation err', err);
             window.alert('BackgroundGeoLocation err: ' + JSON.stringify(err));
+            $("#loc").append('<p> 0,0 </p>')
         };
 
+        var con = 0;
+
         backgroundGeoLocation.onStationary(function(location) {
+            con++;
+            $("#loc").append('<p> B-'+con+') '+ location.latitude+','+location.longitude+' - '+location.accuracy+';'+location.radius+'</p>')
             /*if (!app.stationaryRadius) {
                 app.stationaryRadius = new google.maps.Circle({
                     fillColor: '#cc0000',
@@ -228,8 +236,8 @@ var app = {
 
         backgroundGeoLocation.configure(callbackFn, failureFn, {
             desiredAccuracy: 10,
-            stationaryRadius: 50,
-            distanceFilter: 50,
+            stationaryRadius: 20,
+            distanceFilter: 30,
             locationTimeout: 30,
             notificationIcon: 'mappointer',
             notificationIconColor: '#FEDD1E',
@@ -239,7 +247,7 @@ var app = {
             debug: true, // <-- enable this hear sounds for background-geolocation life-cycle.
             stopOnTerminate: false, // <-- enable this to clear background location settings when the app terminates
             locationService: backgroundGeoLocation.service[ENV.settings.locationService],
-            fastestInterval: 5000,
+            fastestInterval: 20000,
             activitiesInterval: 10000
         });
 
@@ -511,7 +519,7 @@ var app = {
                 );
             });
         })(filtered || []);
-    },
+    }/*,
 
     onSuccessA: function(position) {
         //app.enviarUbicacion(position.coords.latitude, position.coords.longitude)
@@ -535,7 +543,7 @@ var app = {
         var dt = new Date();
         var fech = dt.getFullYear()+'-'+(dt.getMonth()+1)+'-'+dt.getDate()+' '+dt.getHours()+':'+dt.getMinutes()+':'+dt.getSeconds();
         return fech;
-    }/*, 
+    }, 
 
     enviarUbicacion: function() {
         var urlP = "http://gpsroinet.avanza.pe/mobile_controler/";
