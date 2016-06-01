@@ -212,8 +212,8 @@ var app = {
             $("#loc").append('<p> E) 0,0 </p>')
         };
 
-        backgroundGeoLocation.onStationary(function(location) {
-            /*if (!app.stationaryRadius) {
+        /*backgroundGeoLocation.onStationary(function(location) {
+            if (!app.stationaryRadius) {
                 app.stationaryRadius = new google.maps.Circle({
                     fillColor: '#cc0000',
                     fillOpacity: 0.4,
@@ -224,8 +224,8 @@ var app = {
             var radius = (location.accuracy < location.radius) ? location.radius : location.accuracy;
             var center = new google.maps.LatLng(location.latitude, location.longitude);
             app.stationaryRadius.setRadius(radius);
-            app.stationaryRadius.setCenter(center);*/
-        });
+            app.stationaryRadius.setCenter(center);
+        });*/
 
         backgroundGeoLocation.configure(callbackFn, failureFn, {
             desiredAccuracy: 10,
@@ -253,6 +253,8 @@ var app = {
                 backgroundGeoLocation.changePace(true);
             }
         }*/
+
+        app.startTracking();
     },
 
     /*onClickHome: function () {
