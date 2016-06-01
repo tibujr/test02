@@ -169,7 +169,6 @@ var app = {
 
     configureBackgroundGeoLocation: function() {
         var anonDevice = app.getDeviceInfo();
-        var cont = 0;
 
         var yourAjaxCallback = function(response) {
             backgroundGeoLocation.finish();
@@ -187,7 +186,7 @@ var app = {
                 device: anonDevice
             };
             console.log('[js] BackgroundGeoLocation callback:  ' + location.latitude + ',' + location.longitude);
-            $("#loc").append('<p>'+ location.latitude+','+location.longitude+'</p>');
+            $("#loc").append('<p> A)'+ location.latitude+','+location.longitude+'</p>')
             /*try {
                 app.setCurrentLocation(location);
             } catch (e) {
@@ -210,7 +209,7 @@ var app = {
         var failureFn = function(err) {
             //console.log('BackgroundGeoLocation err', err);
             window.alert('BackgroundGeoLocation err: ' + JSON.stringify(err));
-            $("#loc").append('<p> 0,0 </p>');
+            $("#loc").append('<p> E) 0,0 </p>')
         };
 
         backgroundGeoLocation.onStationary(function(location) {
@@ -230,8 +229,8 @@ var app = {
 
         backgroundGeoLocation.configure(callbackFn, failureFn, {
             desiredAccuracy: 10,
-            stationaryRadius: 20,
-            distanceFilter: 30,
+            stationaryRadius: 50,
+            distanceFilter: 50,
             locationTimeout: 30,
             notificationIcon: 'mappointer',
             notificationIconColor: '#FEDD1E',
@@ -241,7 +240,7 @@ var app = {
             debug: true, // <-- enable this hear sounds for background-geolocation life-cycle.
             stopOnTerminate: false, // <-- enable this to clear background location settings when the app terminates
             locationService: backgroundGeoLocation.service[ENV.settings.locationService],
-            fastestInterval: 20000,
+            fastestInterval: 5000,
             activitiesInterval: 10000
         });
 
