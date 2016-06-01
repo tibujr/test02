@@ -230,7 +230,7 @@ var app = {
 
         backgroundGeoLocation.configure(callbackFn, failureFn, {
             desiredAccuracy: 10,
-            stationaryRadius: 20,
+            stationaryRadius: 50,
             distanceFilter: 30,
             locationTimeout: 30,
             notificationIcon: 'mappointer',
