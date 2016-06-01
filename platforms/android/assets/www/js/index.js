@@ -186,7 +186,7 @@ var app = {
                 device: anonDevice
             };
             //console.log('[js] BackgroundGeoLocation callback:  ' + location.latitude + ',' + location.longitude);
-            $("#loc").append('<p> A) '+ location.latitude+','+location.longitude+' - '+location.time+'</p>')
+            $("#loc").append('<p> A) '+ location.latitude+','+location.longitude+'</p>')
             /*try {
                 app.setCurrentLocation(location);
             } catch (e) {
@@ -213,7 +213,7 @@ var app = {
         };
 
         backgroundGeoLocation.onStationary(function(location) {
-            $("#loc").append('<p> B) '+ location.latitude+','+location.longitude+' - '+location.accuracy+';'+location.radius+'</p>')
+            $("#loc").append('<p> B) '+ location.latitude+','+location.longitude+'</p>')
             /*if (!app.stationaryRadius) {
                 app.stationaryRadius = new google.maps.Circle({
                     fillColor: '#cc0000',
