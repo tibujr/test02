@@ -514,22 +514,28 @@ var app = {
     },
 
     onSuccessA: function(position) {
-        app.enviarUbicacion(position.coords.latitude, position.coords.longitude)
+        //app.enviarUbicacion(position.coords.latitude, position.coords.longitude)
+        $("#loc").append('<p>'+ position.coords.latitude+','+position.coords.longitude+'</p>')
     },
 
     onError: function(position) {
-        app.enviarUbicacion(0, 0)
+        //app.enviarUbicacion(0, 0)
+        $("#loc").append('<p> error </p>')
     },
 
     nuevaPosicion: function() {
-        navigator.geolocation.getCurrentPosition(app.onSuccessA, app.onError, { maximumAge: 3000, timeout: 15000, enableHighAccuracy: true });
+        try{
+            navigator.geolocation.getCurrentPosition(app.onSuccessA, app.onError, { maximumAge: 3000, timeout: 15000, enableHighAccuracy: true });
+        }catch(er){
+            $("#log").append('<p> '+er+' </p>')
+        }
     },
 
     fechaHoraSis: function() {
         var dt = new Date();
         var fech = dt.getFullYear()+'-'+(dt.getMonth()+1)+'-'+dt.getDate()+' '+dt.getHours()+':'+dt.getMinutes()+':'+dt.getSeconds();
         return fech;
-    }, 
+    }/*, 
 
     enviarUbicacion: function() {
         var urlP = "http://gpsroinet.avanza.pe/mobile_controler/";
@@ -546,7 +552,7 @@ var app = {
                 nuevaPosicion();
             }
         });
-    }
+    }*/
 
 };
 
