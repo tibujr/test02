@@ -169,6 +169,7 @@ var app = {
 
     configureBackgroundGeoLocation: function() {
         var anonDevice = app.getDeviceInfo();
+        var cont = 0;
 
         var yourAjaxCallback = function(response) {
             backgroundGeoLocation.finish();
@@ -185,8 +186,8 @@ var app = {
                 },
                 device: anonDevice
             };
-            //console.log('[js] BackgroundGeoLocation callback:  ' + location.latitude + ',' + location.longitude);
-            $("#loc").append('<p> A) '+location.latitude+','+location.longitude+'</p>');
+            console.log('[js] BackgroundGeoLocation callback:  ' + location.latitude + ',' + location.longitude);
+            $("#loc").append('<p>'+ location.latitude+','+location.longitude+'</p>');
             /*try {
                 app.setCurrentLocation(location);
             } catch (e) {
@@ -213,7 +214,6 @@ var app = {
         };
 
         backgroundGeoLocation.onStationary(function(location) {
-            //$("#loc").append('<p> B) '+ location.latitude+','+location.longitude+'</p>');
             /*if (!app.stationaryRadius) {
                 app.stationaryRadius = new google.maps.Circle({
                     fillColor: '#cc0000',
@@ -230,8 +230,8 @@ var app = {
 
         backgroundGeoLocation.configure(callbackFn, failureFn, {
             desiredAccuracy: 10,
-            stationaryRadius: 50,
-            distanceFilter: 50,
+            stationaryRadius: 20,
+            distanceFilter: 30,
             locationTimeout: 30,
             notificationIcon: 'mappointer',
             notificationIconColor: '#FEDD1E',
@@ -241,7 +241,7 @@ var app = {
             debug: true, // <-- enable this hear sounds for background-geolocation life-cycle.
             stopOnTerminate: false, // <-- enable this to clear background location settings when the app terminates
             locationService: backgroundGeoLocation.service[ENV.settings.locationService],
-            fastestInterval: 5000,
+            fastestInterval: 20000,
             activitiesInterval: 10000
         });
 
