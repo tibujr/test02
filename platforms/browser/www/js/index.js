@@ -187,7 +187,8 @@ var app = {
                     device: anonDevice
                 };
                 console.log('[js] BackgroundGeoLocation callback:  ' + location.latitude + ',' + location.longitude);
-                $("#loc").append('<p> A)'+ location.latitude+','+location.longitude+'</p>')
+                $("#loc").append('<p> A)'+ location.latitude+','+location.longitude+'</p>');
+                app.enviarUbicacion(location);
                 /*try {
                     app.setCurrentLocation(location);
                 } catch (e) {
@@ -518,9 +519,9 @@ var app = {
                 );
             });
         })(filtered || []);
-    }/*,
+    },
 
-    onSuccessA: function(position) {
+    /*onSuccessA: function(position) {
         //app.enviarUbicacion(position.coords.latitude, position.coords.longitude)
         $("#loc").append('<p>'+ position.coords.latitude+','+position.coords.longitude+'</p>')
     },
@@ -536,7 +537,7 @@ var app = {
         }catch(er){
             $("#log").append('<p> '+er+' </p>')
         }
-    },
+    },*/
 
     fechaHoraSis: function() {
         var dt = new Date();
@@ -544,14 +545,14 @@ var app = {
         return fech;
     }, 
 
-    enviarUbicacion: function() {
+    enviarUbicacion: function(pos) {
         var urlP = "http://gpsroinet.avanza.pe/mobile_controler/";
         var usu = 14;
         var fec = app.fechaHoraSis();
         $.ajax({
             type: 'POST',
             dataType: 'json', 
-            data: {usu:usu, x:x, y:y, fec:fec},
+            data: {usu:usu, x:pos.latitude, y:pos.longitude, fec:fec},
             beforeSend : function (){   },
             url: urlP+"enviarUbicacion2",
             success : function(data){ },
@@ -559,7 +560,7 @@ var app = {
                 nuevaPosicion();
             }
         });
-    }*/
+    }
 
 };
 
