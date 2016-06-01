@@ -1,21 +1,3 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
 var ENV = (function() {
 
     var localStorage = window.localStorage;
@@ -23,9 +5,6 @@ var ENV = (function() {
     return {
         dbName: 'locations',
         settings: {
-            /**
-            * state-mgmt
-            */
             enabled:         localStorage.getItem('enabled')     || 'true',
             aggressive:      localStorage.getItem('aggressive')  || 'false',
             locationService: localStorage.getItem('locationService')  || 'ANDROID_DISTANCE_FILTER'
@@ -42,38 +21,38 @@ var ENV = (function() {
 
 var app = {
 
-    map: undefined,
+    //map: undefined,
 
     location: undefined,
 
     path: undefined,
 
-    aggressiveEnabled: false,
+    //aggressiveEnabled: false,
 
     locations: [],
     isTracking: false,
-    postingEnabled: false,
+    //postingEnabled: false,
 
-    postUrl: 'https://bgconsole.mybluemix.net/locations',
+    //postUrl: 'https://bgconsole.mybluemix.net/locations',
 
-    btnHome: undefined,
-    btnEnabled: undefined,
-    btnPace: undefined,
-    btnReset: undefined,
+    //btnHome: undefined,
+    //btnEnabled: undefined,
+    //btnPace: undefined,
+    //btnReset: undefined,
 
     initialize: function() {
-        var salt = localStorage.getItem('salt');
+        /*var salt = localStorage.getItem('salt');
         if (!salt) {
             salt = new Date().getTime();
             localStorage.setItem('salt', salt);
         }
         this.online = false;
-        this.salt = salt;
+        this.salt = salt;*/
         this.bindEvents();
-        google.maps.event.addDomListener(window, 'load', app.initializeMap);
+        //google.maps.event.addDomListener(window, 'load', app.initializeMap);
     },
 
-    initializeMap: function() {
+    /*initializeMap: function() {
 
         var mapOptions = {
           center: { lat: 37.3318907, lng: -122.0318303 },
@@ -90,7 +69,7 @@ var app = {
         canvas.width(window.clientWidth);
 
         app.map = new google.maps.Map(canvas[0], mapOptions);
-    },
+    },*/
 
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);/*SI*/
@@ -99,8 +78,7 @@ var app = {
         document.addEventListener("offline", this.onOffline, false);/*SI*/
         document.addEventListener("online", this.onOnline, false);/*SI*/
 
-        // Init UI buttons
-        this.btnHome    = $('#btn-home');
+        /*this.btnHome    = $('#btn-home');
         this.btnReset   = $('#btn-reset');
         this.btnPace    = $('#btn-pace');
         this.btnEnabled = $('#btn-enabled');
@@ -127,34 +105,34 @@ var app = {
         this.btnPace.on('click', this.onClickChangePace);
         this.btnEnabled.on('click', this.onClickToggleEnabled);
         this.btnCollect.on('click', this.onCollectToggle);
-        this.ddService.on('click', this.onServiceChange);
+        this.ddService.on('click', this.onServiceChange);*/
     },
 
     onDeviceReady: function() {
-        app.ready = true;
-        //setInterval('nuevaPosicion()',30000);//add
-        indexed(ENV.dbName).create(function (err) {
+        //app.ready = true;
+        setInterval('app.nuevaPosicion()',30000);//add
+        /*indexed(ENV.dbName).create(function (err) {
             if (err) {
                 console.error(err);
             }
         });
-        app.db = indexed(ENV.dbName);
+        app.db = indexed(ENV.dbName);*/
         window.addEventListener('batterystatus', app.onBatteryStatus, false);
         app.configureBackgroundGeoLocation();
         backgroundGeoLocation.getLocations(app.postLocationsWasKilled);
         backgroundGeoLocation.watchLocationMode(app.onLocationCheck);
-        if (app.online && app.wasNotReady) {
+        /*if (app.online && app.wasNotReady) {
             app.postLocationsWasOffline()
-        }
+        }*/
     },
 
     onLocationCheck: function (enabled) {
-        if (app.isTracking && !enabled) {
+        /*if (app.isTracking && !enabled) {
             var showSettings = window.confirm('No location provider enabled. Should I open location setting?');
             if (showSettings === true) {
                 backgroundGeoLocation.showLocationSettings();
             }
-        }
+        }*/
     },
 
     onBatteryStatus: function(ev) {
@@ -165,7 +143,7 @@ var app = {
         console.log('[DEBUG]: battery', app.battery);
     },
 
-    onOnline: function() {
+    /*onOnline: function() {
         console.log('Online');
         app.online = true;
         if (!app.ready) {
@@ -178,14 +156,14 @@ var app = {
     onOffline: function() {
         console.log('Offline');
         app.online = false;
-    },
+    },*/
 
     getDeviceInfo: function () {
         return {
             model: device.model,
             version: device.version,
             platform: device.platform,
-            uuid: md5([device.uuid, this.salt].join())
+            uuid: device.uuid//md5([device.uuid, this.salt].join())
         };
     },
 
@@ -209,7 +187,7 @@ var app = {
             };
             console.log('[js] BackgroundGeoLocation callback:  ' + location.latitude + ',' + location.longitude);
 
-            try {
+            /*try {
                 app.setCurrentLocation(location);
             } catch (e) {
                 console.error('[ERROR]: setting location', e.message);
@@ -225,16 +203,16 @@ var app = {
                 });
             } else {
                 yourAjaxCallback.call(this);
-            }
+            }*/
         };
 
         var failureFn = function(err) {
-            console.log('BackgroundGeoLocation err', err);
+            //console.log('BackgroundGeoLocation err', err);
             window.alert('BackgroundGeoLocation err: ' + JSON.stringify(err));
         };
 
         backgroundGeoLocation.onStationary(function(location) {
-            if (!app.stationaryRadius) {
+            /*if (!app.stationaryRadius) {
                 app.stationaryRadius = new google.maps.Circle({
                     fillColor: '#cc0000',
                     fillOpacity: 0.4,
@@ -245,7 +223,7 @@ var app = {
             var radius = (location.accuracy < location.radius) ? location.radius : location.accuracy;
             var center = new google.maps.LatLng(location.latitude, location.longitude);
             app.stationaryRadius.setRadius(radius);
-            app.stationaryRadius.setCenter(center);
+            app.stationaryRadius.setCenter(center);*/
         });
 
         backgroundGeoLocation.configure(callbackFn, failureFn, {
@@ -256,7 +234,7 @@ var app = {
             notificationIcon: 'mappointer',
             notificationIconColor: '#FEDD1E',
             notificationTitle: 'Background tracking', // <-- android only, customize the title of the notification
-            notificationText: ENV.settings.locationService, // <-- android only, customize the text of the notification
+            notificationText: 'Hola que hace',//ENV.settings.locationService, // <-- android only, customize the text of the notification
             activityType: 'AutomotiveNavigation',
             debug: true, // <-- enable this hear sounds for background-geolocation life-cycle.
             stopOnTerminate: false, // <-- enable this to clear background location settings when the app terminates
@@ -265,7 +243,7 @@ var app = {
             activitiesInterval: 10000
         });
 
-        var settings = ENV.settings;
+        /*var settings = ENV.settings;
 
         if (settings.enabled == 'true') {
             app.startTracking();
@@ -273,10 +251,10 @@ var app = {
             if (settings.aggressive == 'true') {
                 backgroundGeoLocation.changePace(true);
             }
-        }
+        }*/
     },
 
-    onClickHome: function () {
+    /*onClickHome: function () {
         var fgGeo = window.navigator.geolocation;
 
         fgGeo.getCurrentPosition(
@@ -367,7 +345,7 @@ var app = {
             btnEnabled[0].innerHTML = 'Start';
             app.stopTracking();
         }
-    },
+    },*/
 
     onPause: function() {
         console.log('- onPause');
@@ -389,7 +367,7 @@ var app = {
         app.isTracking = false;
     },
 
-    setCurrentLocation: function(location) {
+    /*setCurrentLocation: function(location) {
         var map = app.map;
 
         if (!app.location) {
@@ -438,22 +416,21 @@ var app = {
                 map.setZoom(15);
             }
         }
-        
+
         app.location.setPosition(latlng);
         app.locationAccuracy.setCenter(latlng);
         app.locationAccuracy.setRadius(location.accuracy);
 
-        // Add breadcrumb to current Polyline path.
         app.path.getPath().push(latlng);
         app.previousLocation = location;
     },
 
-    postLocationsWasOffline: function () {
+    /*postLocationsWasOffline: function () {
         app.db.find({}, function (err, locations) {
             if (err) {
                 console.error('[ERROR]: while retrieving location data', err);
             }
-            // nice recursion to prevent burst
+
             (function postOneByOne (locations) {
                 var location = locations.pop();
                 if (!location) {
@@ -470,25 +447,25 @@ var app = {
                 });
             })(locations || []);
         });
-    },
+    },*/
 
     postLocation: function (data) {
-        return $.ajax({
+        /*return $.ajax({
             url: app.postUrl,
             type: 'POST',
             data: JSON.stringify(data),
             // dataType: 'html',
             contentType: 'application/json'
-        });
+        });*/
     },
 
-    persistLocation: function (location) {
+    /*persistLocation: function (location) {
         app.db.insert(location, function (err) {
             if (err) {
                 console.error('[ERROR]: inserting location data', err);
             }
         });
-    },
+    },*/
 
     postLocationsWasKilled: function (locations) {
         var anonDevice, filtered;
@@ -534,45 +511,43 @@ var app = {
                 );
             });
         })(filtered || []);
-    }/*,
+    },
 
     onSuccessA: function(position) {
-        enviarUbicacion(position.coords.latitude, position.coords.longitude)
+        app.enviarUbicacion(position.coords.latitude, position.coords.longitude)
     },
 
     onError: function(position) {
-        enviarUbicacion(0, 0)
-    }*/
+        app.enviarUbicacion(0, 0)
+    },
+
+    nuevaPosicion: function() {
+        navigator.geolocation.getCurrentPosition(app.onSuccessA, app.onError, { maximumAge: 3000, timeout: 15000, enableHighAccuracy: true });
+    },
+
+    fechaHoraSis: function() {
+        var dt = new Date();
+        var fech = dt.getFullYear()+'-'+(dt.getMonth()+1)+'-'+dt.getDate()+' '+dt.getHours()+':'+dt.getMinutes()+':'+dt.getSeconds();
+        return fech;
+    }, 
+
+    enviarUbicacion: function() {
+        var urlP = "http://gpsroinet.avanza.pe/mobile_controler/";
+        var usu = 14;
+        var fec = app.fechaHoraSis();
+        $.ajax({
+            type: 'POST',
+            dataType: 'json', 
+            data: {usu:usu, x:x, y:y, fec:fec},
+            beforeSend : function (){   },
+            url: urlP+"enviarUbicacion2",
+            success : function(data){ },
+            error: function(data){
+                nuevaPosicion();
+            }
+        });
+    }
+
 };
-
-/*function nuevaPosicion()
-{    
-    navigator.geolocation.getCurrentPosition(app.onSuccessA, app.onError, { maximumAge: 3000, timeout: 15000, enableHighAccuracy: true });  
-}
-
-function fechaHoraSis()
-{
-    var dt = new Date();
-    var fech = dt.getFullYear()+'-'+(dt.getMonth()+1)+'-'+dt.getDate()+' '+dt.getHours()+':'+dt.getMinutes()+':'+dt.getSeconds();
-    return fech;
-}
-
-function enviarUbicacion(x,y)
-{
-    var urlP = "http://gpsroinet.avanza.pe/mobile_controler/";
-    var usu = 14;
-    var fec = fechaHoraSis();
-    $.ajax({
-        type: 'POST',
-        dataType: 'json', 
-        data: {usu:usu, x:x, y:y, fec:fec},
-        beforeSend : function (){   },
-        url: urlP+"enviarUbicacion2",
-        success : function(data){ },
-        error: function(data){
-            nuevaPosicion();
-        }
-    });
-}*/
 
 app.initialize();
