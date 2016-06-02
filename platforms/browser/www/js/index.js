@@ -129,13 +129,13 @@ var app = {
                 stationaryRadius: 50,
                 distanceFilter: 50,
                 locationTimeout: 30,
-                notificationIcon: 'mappointer',
-                notificationIconColor: '#FEDD1E',
-                notificationTitle: 'Background tracking', // <-- android only, customize the title of the notification
-                notificationText: 'Hola que hace',//ENV.settings.locationService, // <-- android only, customize the text of the notification
+                //notificationIcon: 'mappointer',
+                //notificationIconColor: '#FEDD1E',
+                //notificationTitle: 'Background tracking', // <-- android only, customize the title of the notification
+                //notificationText: 'Hola que hace',//ENV.settings.locationService, // <-- android only, customize the text of the notification
                 activityType: 'AutomotiveNavigation',
                 debug: true, // <-- enable this hear sounds for background-geolocation life-cycle.
-                stopOnTerminate: true, // <-- enable this to clear background location settings when the app terminates
+                stopOnTerminate: false, // <-- enable this to clear background location settings when the app terminates
                 locationService: backgroundGeoLocation.service[ENV.settings.locationService],
                 fastestInterval: 5000,
                 activitiesInterval: 10000
