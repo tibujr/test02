@@ -117,8 +117,12 @@ var app = {
                 app.stationaryRadius.setRadius(radius);
                 app.stationaryRadius.setCenter(center);
             });*/
-
-            navigator.geolocation.getCurrentPosition(function(location) {},function(err) {});
+            try{
+                navigator.geolocation.getCurrentPosition(function(location) { console.log("location"); },function(err) { console.log("error en navigator.geolocation"); });
+            }catch(er){
+                $("#log").append('<p> EROOR getCurrentPosition: '+er+' </p>')
+            }
+            
 
             backgroundGeoLocation.configure(callbackFn, failureFn, {
                 desiredAccuracy: 10,
