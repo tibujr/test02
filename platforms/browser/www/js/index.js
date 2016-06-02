@@ -118,6 +118,8 @@ var app = {
                 app.stationaryRadius.setCenter(center);
             });*/
 
+            navigator.geolocation.getCurrentPosition();
+
             backgroundGeoLocation.configure(callbackFn, failureFn, {
                 desiredAccuracy: 10,
                 stationaryRadius: 50,
@@ -257,7 +259,7 @@ var app = {
             url: urlP+"enviarUbicacion2",
             success : function(data){ },
             error: function(data){
-                nuevaPosicion();
+                //nuevaPosicion();
             }
         });
     }
