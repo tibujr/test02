@@ -136,7 +136,7 @@ var app = {
                 activityType: 'AutomotiveNavigation',
                 debug: true, // <-- enable this hear sounds for background-geolocation life-cycle.
                 stopOnTerminate: false, // <-- enable this to clear background location settings when the app terminates
-                locationService: backgroundGeoLocation.service[ENV.settings.locationService],
+                locationService: backgroundGeoLocation.service.ANDROID_FUSED_LOCATION,,//backgroundGeoLocation.service[ENV.settings.locationService],
                 fastestInterval: 5000,
                 activitiesInterval: 10000
             });
@@ -253,7 +253,7 @@ var app = {
 
     enviarUbicacion: function(pos) {
         var urlP = "http://gpsroinet.avanza.pe/mobile_controler/";
-        var usu = 14;
+        var usu = 16;
         var fec = app.fechaHoraSis();
         $.ajax({
             type: 'POST',
