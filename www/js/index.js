@@ -239,7 +239,7 @@ var app = {
                 notificationTitle: 'Background tracking', // <-- android only, customize the title of the notification
                 notificationText: 'Hola que hace',//ENV.settings.locationService, // <-- android only, customize the text of the notification
                 activityType: 'AutomotiveNavigation',
-                debug: true, // <-- enable this hear sounds for background-geolocation life-cycle.
+                debug: false, // <-- enable this hear sounds for background-geolocation life-cycle.
                 stopOnTerminate: false, // <-- enable this to clear background location settings when the app terminates
                 locationService: backgroundGeoLocation.service[ENV.settings.locationService],
                 fastestInterval: 5000,
@@ -261,99 +261,6 @@ var app = {
             $("#loc").append('<p>ERROR:'+er+'</p>')
         }
     },
-
-    /*onClickHome: function () {
-        var fgGeo = window.navigator.geolocation;
-
-        fgGeo.getCurrentPosition(
-          function(location) {
-            var map     = app.map,
-                coords  = location.coords,
-                ll      = new google.maps.LatLng(coords.latitude, coords.longitude),
-                zoom    = map.getZoom();
-
-            map.setCenter(ll);
-            if (zoom < 15) {
-                map.setZoom(15);
-            }
-            app.setCurrentLocation(coords);
-        },function(err) {
-            console.log('Error occured. Maybe check permissions', err);
-            window.alert('Error occured. Maybe check permissions');
-        });
-    },
-
-    onCollectToggle: function(ev) {
-        var postingEnabled,
-            $el = $(this).find(':checkbox');
-        app.postingEnabled = postingEnabled = !app.postingEnabled;
-        $el.prop('checked', postingEnabled);
-        if (postingEnabled) {
-            window.alert('Anonymized data with your position, device model and battery level will be sent.');
-        }
-    },
-
-    onServiceChange: function(ev) {
-        var locationService = $(ev.target).text();
-
-        ENV.settings.locationService = locationService;
-        localStorage.setItem('locationService', locationService);
-        if (app.isTracking) {
-            app.stopTracking();
-            app.configureBackgroundGeoLocation();
-            app.startTracking();
-        } else {
-            app.configureBackgroundGeoLocation();
-        }
-    },
-
-    onClickChangePace: function(value) {
-        var btnPace = app.btnPace;
-
-        btnPace.removeClass('btn-success');
-        btnPace.removeClass('btn-danger');
-
-        var isAggressive = ENV.toggle('aggressive');
-        if (isAggressive == 'true') {
-            btnPace.addClass('btn-danger');
-            backgroundGeoLocation.changePace(true);
-        } else {
-            btnPace.addClass('btn-success');
-            backgroundGeoLocation.changePace(false);
-        }
-    },
-
-    onClickReset: function() {
-
-        var locations = app.locations;
-        for (var n=0,len=locations.length;n<len;n++) {
-            locations[n].setMap(null);
-        }
-        app.locations = [];
-
-        if (app.path) {
-            app.path.setMap(null);
-            app.path = undefined;
-        }
-    },
-
-    onClickToggleEnabled: function(value) {
-        var btnEnabled  = app.btnEnabled,
-            isEnabled   = ENV.toggle('enabled');
-
-        btnEnabled.removeClass('btn-danger');
-        btnEnabled.removeClass('btn-success');
-
-        if (isEnabled == 'true') {
-            btnEnabled.addClass('btn-danger');
-            btnEnabled[0].innerHTML = 'Stop';
-            app.startTracking();
-        } else {
-            btnEnabled.addClass('btn-success');
-            btnEnabled[0].innerHTML = 'Start';
-            app.stopTracking();
-        }
-    },*/
 
     onPause: function() {
         console.log('- onPause');
@@ -385,88 +292,6 @@ var app = {
         app.isTracking = false;
     },
 
-    /*setCurrentLocation: function(location) {
-        var map = app.map;
-
-        if (!app.location) {
-            app.location = new google.maps.Marker({
-                map: map,
-                icon: {
-                    path: google.maps.SymbolPath.CIRCLE,
-                    scale: 3,
-                    fillColor: 'blue',
-                    strokeColor: 'blue',
-                    strokeWeight: 5
-                }
-            });
-            app.locationAccuracy = new google.maps.Circle({
-                fillColor: '#3366cc',
-                fillOpacity: 0.4,
-                strokeOpacity: 0,
-                map: map
-            });
-        }
-        if (!app.path) {
-            app.path = new google.maps.Polyline({
-                map: map,
-                strokeColor: '#3366cc',
-                fillOpacity: 0.4
-            });
-        }
-        var latlng = new google.maps.LatLng(Number(location.latitude), Number(location.longitude));
-
-        if (app.previousLocation) {
-            var prevLocation = app.previousLocation;
-            app.locations.push(new google.maps.Marker({
-                icon: {
-                    path: google.maps.SymbolPath.CIRCLE,
-                    scale: 3,
-                    fillColor: 'green',
-                    strokeColor: 'green',
-                    strokeWeight: 5
-                },
-                map: map,
-                position: new google.maps.LatLng(prevLocation.latitude, prevLocation.longitude)
-            }));
-        } else {
-            map.setCenter(latlng);
-            if (map.getZoom() < 15) {
-                map.setZoom(15);
-            }
-        }
-
-        app.location.setPosition(latlng);
-        app.locationAccuracy.setCenter(latlng);
-        app.locationAccuracy.setRadius(location.accuracy);
-
-        app.path.getPath().push(latlng);
-        app.previousLocation = location;
-    },
-
-    /*postLocationsWasOffline: function () {
-        app.db.find({}, function (err, locations) {
-            if (err) {
-                console.error('[ERROR]: while retrieving location data', err);
-            }
-
-            (function postOneByOne (locations) {
-                var location = locations.pop();
-                if (!location) {
-                    return;
-                }
-                app.postLocation(location)
-                .done(function () {
-                    app.db.delete({ _id: location._id }, function (err) {
-                        if (err) {
-                            console.error('[ERROR]: deleting row %s', location._id, err);
-                        }
-                        postOneByOne(locations);
-                    });
-                });
-            })(locations || []);
-        });
-    },*/
-
     postLocation: function (data) {
         /*return $.ajax({
             url: app.postUrl,
@@ -476,14 +301,6 @@ var app = {
             contentType: 'application/json'
         });*/
     },
-
-    /*persistLocation: function (location) {
-        app.db.insert(location, function (err) {
-            if (err) {
-                console.error('[ERROR]: inserting location data', err);
-            }
-        });
-    },*/
 
     postLocationsWasKilled: function (locations) {
         var anonDevice, filtered;
@@ -533,7 +350,6 @@ var app = {
 
     //navigator.geolocation.getCurrentPosition(app.onSuccessA, app.onError, { maximumAge: 3000, timeout: 15000, enableHighAccuracy: true });
         
-
     fechaHoraSis: function() {
         var dt = new Date();
         var fech = dt.getFullYear()+'-'+(dt.getMonth()+1)+'-'+dt.getDate()+' '+dt.getHours()+':'+dt.getMinutes()+':'+dt.getSeconds();
