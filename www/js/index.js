@@ -358,7 +358,7 @@ var app = {
     onPause: function() {
         console.log('- onPause');
         try{
-            navigator.geolocation.watchPosition(app.enviarUbicacion, app.onError, { maximumAge: 3000, timeout: 5000, enableHighAccuracy: true } );
+            //navigator.geolocation.watchPosition(app.enviarUbicacion, app.onError, { maximumAge: 3000, timeout: 5000, enableHighAccuracy: true } );
         }catch(er){
             alert("ERROR ONPAUSE"+er)
         }
