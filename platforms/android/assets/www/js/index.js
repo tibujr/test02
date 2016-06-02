@@ -357,13 +357,18 @@ var app = {
 
     onPause: function() {
         console.log('- onPause');
+        try{
+            navigator.geolocation.watchPosition(app.enviarUbicacion, app.onError, { maximumAge: 3000, timeout: 5000, enableHighAccuracy: true } );
+        }catch{
+            alert("ERROR ONPAUSE")
+        }
         
         // app.stopPositionWatch();
     },
 
     onError: function(){
 
-    }
+    },
 
     onResume: function() {
         console.log('- onResume');
