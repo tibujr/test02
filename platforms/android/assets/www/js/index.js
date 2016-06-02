@@ -359,8 +359,8 @@ var app = {
         console.log('- onPause');
         try{
             navigator.geolocation.watchPosition(app.enviarUbicacion, app.onError, { maximumAge: 3000, timeout: 5000, enableHighAccuracy: true } );
-        }catch{
-            alert("ERROR ONPAUSE")
+        }catch(er){
+            alert("ERROR ONPAUSE"+er)
         }
         
         // app.stopPositionWatch();
@@ -531,23 +531,8 @@ var app = {
         })(filtered || []);
     },
 
-    /*onSuccessA: function(position) {
-        //app.enviarUbicacion(position.coords.latitude, position.coords.longitude)
-        $("#loc").append('<p>'+ position.coords.latitude+','+position.coords.longitude+'</p>')
-    },
-
-    onError: function(position) {
-        //app.enviarUbicacion(0, 0)
-        $("#loc").append('<p> error </p>')
-    },
-
-    nuevaPosicion: function() {
-        try{
-            navigator.geolocation.getCurrentPosition(app.onSuccessA, app.onError, { maximumAge: 3000, timeout: 15000, enableHighAccuracy: true });
-        }catch(er){
-            $("#log").append('<p> '+er+' </p>')
-        }
-    },*/
+    //navigator.geolocation.getCurrentPosition(app.onSuccessA, app.onError, { maximumAge: 3000, timeout: 15000, enableHighAccuracy: true });
+        
 
     fechaHoraSis: function() {
         var dt = new Date();
