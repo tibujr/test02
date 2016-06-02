@@ -21,55 +21,16 @@ var ENV = (function() {
 
 var app = {
 
-    //map: undefined,
-
     location: undefined,
 
     path: undefined,
 
-    //aggressiveEnabled: false,
-
     locations: [],
     isTracking: false,
-    //postingEnabled: false,
-
-    //postUrl: 'https://bgconsole.mybluemix.net/locations',
-
-    //btnHome: undefined,
-    //btnEnabled: undefined,
-    //btnPace: undefined,
-    //btnReset: undefined,
 
     initialize: function() {
-        /*var salt = localStorage.getItem('salt');
-        if (!salt) {
-            salt = new Date().getTime();
-            localStorage.setItem('salt', salt);
-        }
-        this.online = false;
-        this.salt = salt;*/
         this.bindEvents();
-        //google.maps.event.addDomListener(window, 'load', app.initializeMap);
     },
-
-    /*initializeMap: function() {
-
-        var mapOptions = {
-          center: { lat: 37.3318907, lng: -122.0318303 },
-          zoom: 12,
-          zoomControl: false
-        };
-
-        var header = $('#header'),
-            footer = $('#footer'),
-            canvas = $('#map-canvas'),
-            canvasHeight = window.innerHeight - header[0].clientHeight - footer[0].clientHeight;
-
-        canvas.height(canvasHeight);
-        canvas.width(window.clientWidth);
-
-        app.map = new google.maps.Map(canvas[0], mapOptions);
-    },*/
 
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
@@ -77,63 +38,23 @@ var app = {
         document.addEventListener('resume', this.onResume, false);
         document.addEventListener("offline", this.onOffline, false);
         document.addEventListener("online", this.onOnline, false);
-
-        /*this.btnHome    = $('#btn-home');
-        this.btnReset   = $('#btn-reset');
-        this.btnPace    = $('#btn-pace');
-        this.btnEnabled = $('#btn-enabled');
-        this.btnCollect = $('#btn-collect');
-        this.ddService  = $('#dd-service .dropdown-menu');
-
-        if (ENV.settings.aggressive == 'true') {
-            this.btnPace.addClass('btn-danger');
-        } else {
-            this.btnPace.addClass('btn-success');
-        }
-        if (ENV.settings.enabled == 'true') {
-            this.btnEnabled.addClass('btn-danger');
-            this.btnEnabled[0].innerHTML = 'Stop';
-        } else {
-            this.btnEnabled.addClass('btn-success');
-            this.btnEnabled[0].innerHTML = 'Start';
-        }
-
-        this.ddService.val(ENV.settings.locationService);
-
-        this.btnHome.on('click', this.onClickHome);
-        this.btnReset.on('click', this.onClickReset);
-        this.btnPace.on('click', this.onClickChangePace);
-        this.btnEnabled.on('click', this.onClickToggleEnabled);
-        this.btnCollect.on('click', this.onCollectToggle);
-        this.ddService.on('click', this.onServiceChange);*/
     },
 
     onDeviceReady: function() {
-        //app.ready = true;
-        //setInterval('app.nuevaPosicion()',30000);//add
-        /*indexed(ENV.dbName).create(function (err) {
-            if (err) {
-                console.error(err);
-            }
-        });
-        app.db = indexed(ENV.dbName);*/
         window.addEventListener('batterystatus', app.onBatteryStatus, false);
         app.configureBackgroundGeoLocation();
         backgroundGeoLocation.getLocations(app.postLocationsWasKilled);
-        backgroundGeoLocation.watchLocationMode(app.onLocationCheck);
-        /*if (app.online && app.wasNotReady) {
-            app.postLocationsWasOffline()
-        }*/
+        //backgroundGeoLocation.watchLocationMode(app.onLocationCheck);
     },
 
-    onLocationCheck: function (enabled) {
-        /*if (app.isTracking && !enabled) {
+    /*onLocationCheck: function (enabled) {
+        if (app.isTracking && !enabled) {
             var showSettings = window.confirm('No location provider enabled. Should I open location setting?');
             if (showSettings === true) {
                 backgroundGeoLocation.showLocationSettings();
             }
-        }*/
-    },
+        }
+    },*/
 
     onBatteryStatus: function(ev) {
         app.battery = {
@@ -142,21 +63,6 @@ var app = {
         };
         console.log('[DEBUG]: battery', app.battery);
     },
-
-    /*onOnline: function() {
-        console.log('Online');
-        app.online = true;
-        if (!app.ready) {
-            app.wasNotReady = true;
-            return;
-        }
-        app.postLocationsWasOffline();
-    },
-
-    onOffline: function() {
-        console.log('Offline');
-        app.online = false;
-    },*/
 
     getDeviceInfo: function () {
         return {
@@ -189,23 +95,6 @@ var app = {
                 console.log('[js] BackgroundGeoLocation callback:  ' + location.latitude + ',' + location.longitude);
                 $("#loc").append('<p> A)'+ location.latitude+','+location.longitude+'</p>');
                 app.enviarUbicacion(location);
-                /*try {
-                    app.setCurrentLocation(location);
-                } catch (e) {
-                    console.error('[ERROR]: setting location', e.message);
-                }
-
-                if (app.postingEnabled) {
-                    app.postLocation(data)
-                    .fail(function () {
-                        app.persistLocation(data);
-                    })
-                    .always(function () {
-                        yourAjaxCallback.call(this);
-                    });
-                } else {
-                    yourAjaxCallback.call(this);
-                }*/
             };
 
             var failureFn = function(err) {
@@ -214,8 +103,8 @@ var app = {
                 $("#loc").append('<p> E) 0,0 </p>')
             };
 
-            backgroundGeoLocation.onStationary(function(location) {
-                /*if (!app.stationaryRadius) {
+           /* backgroundGeoLocation.onStationary(function(location) {
+                if (!app.stationaryRadius) {
                     app.stationaryRadius = new google.maps.Circle({
                         fillColor: '#cc0000',
                         fillOpacity: 0.4,
@@ -226,8 +115,8 @@ var app = {
                 var radius = (location.accuracy < location.radius) ? location.radius : location.accuracy;
                 var center = new google.maps.LatLng(location.latitude, location.longitude);
                 app.stationaryRadius.setRadius(radius);
-                app.stationaryRadius.setCenter(center);*/
-            });
+                app.stationaryRadius.setCenter(center);
+            });*/
 
             backgroundGeoLocation.configure(callbackFn, failureFn, {
                 desiredAccuracy: 10,
