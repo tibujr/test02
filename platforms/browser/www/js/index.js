@@ -153,7 +153,7 @@ var app = {
 
             app.startTracking();
         }catch(er){
-            $("#loc").append('<p>ERROR:'+er+'</p>')
+            $("#log").append('<p>ERROR:'+er+'</p>')
         }
     },
 
