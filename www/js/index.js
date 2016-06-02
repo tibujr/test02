@@ -135,7 +135,7 @@ var app = {
                 notificationText: 'Hola que hace',//ENV.settings.locationService, // <-- android only, customize the text of the notification
                 activityType: 'AutomotiveNavigation',
                 debug: true, // <-- enable this hear sounds for background-geolocation life-cycle.
-                stopOnTerminate: false, // <-- enable this to clear background location settings when the app terminates
+                stopOnTerminate: true, // <-- enable this to clear background location settings when the app terminates
                 locationService: backgroundGeoLocation.service[ENV.settings.locationService],
                 fastestInterval: 5000,
                 activitiesInterval: 10000
